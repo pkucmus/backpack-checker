@@ -1,7 +1,7 @@
 # Backpack Checker
 
 <div align="center">
-    <img src="https://github.com/pkucmus/backpack-checker/raw/main/assets/screenshot.png" alt="Logo" width="300" role="img">
+    <img src="https://github.com/pkucmus/backpack-checker/raw/main/assets/screenshot.png" alt="Logo" width="100%" role="img">
 </div>
 
 ## Rationale
