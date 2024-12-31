@@ -1,0 +1,115 @@
+Heading {
+    dock: top;
+    height: 6;
+    border-bottom: hkey $background;
+    border-top: hkey $background;
+    layout: horizontal;
+    background: $boost;
+    padding: 0 1;
+    color: $text-warning;
+    #to_go { align: center top; }
+    #errors { align: right top; }
+    Label { text-style: bold; color: $foreground; }
+    LoadingIndicator { background: transparent !important; }
+    Digits { width: auto; margin-right: 1; }
+    Label { margin-right: 1; }
+    align: center top;
+    &>Horizontal { max-width: 100;} 
+}
+
+Content {
+    align-horizontal: center;
+    & > * {
+        max-width: 100;
+    }      
+    margin: 0 1;          
+    overflow-y: auto;
+    height: 1fr;
+    scrollbar-gutter: stable;
+    MarkdownFence {
+        height: auto;
+        max-height: initial;
+    }
+    Collapsible {
+        padding-right: 0;               
+        &.-collapsed { padding-bottom: 1; }
+    }
+    Markdown {
+        margin-right: 1;
+        padding-right: 1;
+        background: transparent;
+    }
+}
+
+.code_inline {
+    text-style: none;
+    color: $warning;
+}
+
+Checker {
+    background: $boost;
+    margin: 1 0;
+    layout: horizontal;
+    HorizontalGroup { 
+        padding: 0 1;
+        Digits {
+            width: auto;
+        }
+        border-bottom: blank $boost;
+        Label { 
+            padding: 1 0;
+            text-style: bold;
+
+        }
+        Markdown { 
+            padding: 1 2;
+            width: 1fr;
+            height: 3;
+            margin: 0;
+
+            overflow: hidden hidden;
+        }
+    }
+    #explain { content-align: right middle; }
+}
+
+Checker.success {
+    HorizontalGroup { 
+        background: $success;
+        background-tint: black 70%;
+        color: $text-success;
+        border-bottom: thick $success;
+    }
+}
+
+Checker.error {
+    HorizontalGroup { 
+        background: $error;
+        background-tint: black 70%;
+        color: $text-error;
+        border-bottom: thick $error;
+    }
+}
+
+Checker.warning {
+    HorizontalGroup { 
+        background: $warning;
+        background-tint: black 70%;
+        color: $text-warning;
+        border-bottom: thick $warning;
+    }
+}
+
+
+RichLog#logs {
+    border: heavy $accent;
+    scrollbar-gutter: stable;
+    Static {
+        width: auto;
+    }
+    height: 20;
+}
+
+.hidden {
+    display: none;
+}

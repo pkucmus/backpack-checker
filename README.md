@@ -6,17 +6,17 @@
 
 ## Rationale
 
-Let's be honest... I only made it to check the amazing [Textual](https://textual.textualize.io/) on something. But also, there is some merit to it (you can find it if you try very hard :D), working with a team you might want to rely on a tool, like "everyone, let's install [uv](https://docs.astral.sh/uv/guides/scripts/#creating-a-python-script) or [hatch](https://hatch.pypa.io/1.13/how-to/run/python-scripts/) so we can work with [inline script metadata](https://packaging.python.org/en/latest/specifications/inline-script-metadata/)", half of them will ask you after 3 months how to run you script... not to mention any newcomers.
+Let's be honest... I made this mainly to try out the amazing [Textual](https://textual.textualize.io/) on something. But there's some merit to it (if you look hard enough :D). When working with a team, you might want to rely on a tool, like saying, "everyone, let's install [uv](https://docs.astral.sh/uv/guides/scripts/#creating-a-python-script) or [hatch](https://hatch.pypa.io/1.13/how-to/run/python-scripts/) so we can work with [inline script metadata](https://packaging.python.org/en/latest/specifications/inline-script-metadata/)." Half of your team will ask you three months later how to run your script... not to mention any newcomers.
 
-And yeah there are tools or should I say frameworks like Nix and stuff but I don't care how you got the tool or what machine/system you are using, I only care to know if I can rely on the fact that everyone can use Docker Compose in a specific version. 
+And yeah, there are tools—or should I say frameworks—like Nix and similar ones. But I don't care how you got the tool or what machine/system you are using. I only care to know if I can rely on the fact that everyone can use Docker Compose in a specific version.
 
-There might be better tools like this, I didn't look - anyway, if you'll find this useful, thats awesome - it's here for you to use.
+There might be better tools for this, but I didn't look. Anyway, if you find this useful, that's awesome—it's here for you to use.
 
 ## Usage
 
-That this provides is a bunch of **Check** classes and a TUI application made with the amazing [Textual](https://textual.textualize.io/) (I mean honestly the tool is one thing, but the way they made it is something else...).
+What this provides is a bunch of **Check** classes and a TUI application made with the amazing [Textual](https://textual.textualize.io/) (honestly, the tool itself is great, but the way it was made is something else...).
 
-The idea is that you would install it in whatever manner and write yourself a backpack.py script. Probably the most convienient method would be to use the already mentioned inline script metadata:
+The idea is to install it however you prefer and write a `backpack.py` script. Probably the most convenient method would be to use the aforementioned inline script metadata:
 
 ```python
 # /// script
@@ -61,9 +61,9 @@ and run it with `uv run backpack.py` or `hatch run backpack.py`.
 
 ### Checkers
 
-You can use the premade checkers. To do that you will need to define some data for them. 
+You can use the premade checkers. To do that, you'll need to define some data for them.
 
-As you will see in the examples bellow, you can modify those quite a lot: you can make a `__init__` to provide args to the checker, you can overload the `name` and `explanation` properties to base the verbiage on something dynamic.
+As you'll see in the examples below, you can customize these extensively: you can create a `__init__` method to provide arguments to the checker or override the `name` and `explanation` properties to make the messaging dynamic.
 
 For example:
 
@@ -75,24 +75,23 @@ from backpack_checker.checker import SubprocessCheck, Necessity
 class AWSLocal(SubprocessCheck):
     _name = "Check if `awslocal` is installed"
     _explanation = """\
-AWS Local is a wrapper for the AWS CLI that allows you to interface AWS instances that 
-are running locally - i.e. with Localstack.
+AWS Local is a wrapper for the AWS CLI that allows you to interface with AWS instances 
+running locally, e.g., with Localstack.
 
 More about awslocal [here](https://github.com/localstack/awscli-local?tab=readme-ov-file#example).
-
 """
     necessity = Necessity.SUGGESTED
     command = "awslocal --version"
 ```
 
-This checks if the `awslocal --version` command will execute with return code `0`. The verbiage is to provide instructions for the backpack users. You can use [Markdown](https://textual.textualize.io/widget_gallery/#markdown) when defining the name and explanation. The `necessity` attribute (by default `Necessity.REQUIRED`) will only throw a warning (paint yellow) and mark the failure as nothing wrong.
+This checks if the `awslocal --version` command executes with return code `0`. The message is designed to provide instructions for backpack users. You can use [Markdown](https://textual.textualize.io/widget_gallery/#markdown) when defining the name and explanation. The `necessity` attribute (default is `Necessity.REQUIRED`) will only throw a warning (painted yellow) and mark the failure as non-critical.
 
 > [!TIP]  
-> So... in this example I'm suggesting you should install `awslocal`, but if you'd rather use `aws --endpoint-url=http://localhost:4566` then it's fine too.
+> In this example, I'm suggesting you install `awslocal`. But if you'd rather use `aws --endpoint-url=http://localhost:4566`, that's fine too.
 
 #### MinimalVersionCheck
 
-We can also use the deriative of `SubprocessCheck` which is `MinimalVersionCheck` which makes it faster to check of a tool's existince but with the requirement for a minimal semantiv version.
+You can also use a derivative of `SubprocessCheck`, called `MinimalVersionCheck`, to check for the existence of a tool and enforce a minimal semantic version.
 
 ```python
 from backpack_checker.checker import MinimalVersionCheck
@@ -109,7 +108,7 @@ app = BackpackApp(
 )
 ```
 
-Not everything would respond with just `2.20.3` like `docker-compose --version --short` does in that case you can always overload the `validate` method:
+If a command doesn't directly return something like `2.20.3` (as `docker-compose --version --short` does), you can override the `validate` method:
 
 ```python
 from semver import Version
@@ -132,7 +131,7 @@ app = BackpackApp(
 
 #### DockerContainerRunning
 
-Another checker is the `DockerContainerRunning` which will use the [Docker SDK for Python](https://docker-py.readthedocs.io/en/stable/) to interact with your Docker engine to ask for rinnung containers. Effectively invokes `docker.from_env().containers.list(filters=self.container_list_filters)` 
+Another checker is `DockerContainerRunning`, which uses the [Docker SDK for Python](https://docker-py.readthedocs.io/en/stable/) to interact with your Docker engine and query running containers. It effectively invokes `docker.from_env().containers.list(filters=self.container_list_filters)`.
 
 ```python
 class LocalstackRunning(DockerContainerRunning):
@@ -143,10 +142,9 @@ class LocalstackRunning(DockerContainerRunning):
 
 #### EnvVarsRequired and EnvVarsSuggested
 
-These two are checking if you have env vars set:
+These check whether specific environment variables are set:
 
 ```python
-
 UV_EXTRA_INDEX_URL_EXPLANATION = """..."""
 PIP_EXTRA_INDEX_URL_EXPLANATION = """..."""
 
@@ -158,7 +156,7 @@ app = BackpackApp(
             UV_EXTRA_INDEX_URL_EXPLANATION,
         ),
         EnvVarsSuggested(
-            "Check if `PIP_EXTRA_INDEX_URL` env vars is set",
+            "Check if `PIP_EXTRA_INDEX_URL` env var is set",
             ["PIP_EXTRA_INDEX_URL"],
             PIP_EXTRA_INDEX_URL_EXPLANATION,
         ),
@@ -168,7 +166,7 @@ app = BackpackApp(
 
 #### And/Or Checkers
 
-You can also group the checks with `And` and `Or`:
+You can also group checks using `And` or `Or`:
 
 ```python
 from backpack_checker.checker import MinimalVersionCheck, Or
@@ -188,11 +186,10 @@ class OrDockerCompose(Or[str]):
     @property
     def explanation(self) -> str:
         return f"""\
-This check looks for either `docker-compose` or `docker compose` in the system. Either
-one is required to run any of our applications. Additionally, the version of the tool
-should be at least `{self.minimal_version}`. That version allows you to use the `include`
-directive with relative paths in your `docker-compose.yml` files - we rely on that
-feature.
+This check ensures either `docker-compose` or `docker compose` is installed. 
+Additionally, the version must be at least `{self.minimal_version}`, which supports 
+features like the `include` directive with relative paths in `docker-compose.yml` files. 
+We rely on that feature.
 """
 
     def __init__(self, minimal_version: Version | str):
@@ -210,13 +207,13 @@ app = BackpackApp(
 )
 ```
 
-The `Or` one will catch any errors and will return a `True` if `any` outcome is positive, `And` will do the same but only report a success once `all` oucomes are succesful. 
+The `Or` checker returns `True` if any outcome is positive, while the `And` checker succeeds only if all outcomes are successful.
 
 ## What would be cool
 
-If I ever have time to play with this again, then I would probably:
+If I ever have time to play with this again, I’d probably:
 
-- [ ] separate the UI (TUI) from the checking process
-  - [ ] allow to run the checker with a JSON result that could be used by the UI (possibly multiple UIs)
-- [ ] make a CLI entrypoint that would work like `backpack check path/to/your/backpack.py`
-- [ ] having any test coverage here would be cool...
+- [ ] Separate the UI (TUI) from the checking process.
+  - [ ] Allow running the checker with a JSON result usable by the UI (potentially multiple UIs).
+- [ ] Create a CLI entry point that works like `backpack check path/to/your/backpack.py`.
+- [ ] Add some test coverage here—it would be cool...
